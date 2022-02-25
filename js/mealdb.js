@@ -1,15 +1,21 @@
+const spinner = document.getElementById('spinner');
+const seachFiel = document.getElementById('search-field');
+
 const loadFood = () => {
-    const seachFiel = document.getElementById('search-field');
+    // clearing content to show spinner correctly
+    const resulDiv = document.getElementById('result-div');
+    resulDiv.textContent = '';
+    // fetching data 
     const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${seachFiel.value}`;
+    spinner.removeAttribute('hidden');
     fetch(url)
     .then(res => res.json())
     .then(data => displayResult(data.meals))
-    // console.log(url);
     seachFiel.value = '';
 }
 const displayResult = meals => {
     const resulDiv = document.getElementById('result-div');
-    resulDiv.textContent = '';
+    // nothing found handle 
     if(meals == null){
         const div = document.createElement('div');
         div.classList.add('w-100')
@@ -19,7 +25,9 @@ const displayResult = meals => {
             </div>
         `
         resulDiv.appendChild(div);
+        spinner.setAttribute('hidden', '');
     }
+    // showing results section 
     else{
         meals.forEach(meal => {
             const div = document.createElement('div');
@@ -35,6 +43,7 @@ const displayResult = meals => {
             </div>
             `
             resulDiv.appendChild(div);
+            spinner.setAttribute('hidden', '');
         });
     }
 }
